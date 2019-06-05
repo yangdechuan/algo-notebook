@@ -1,7 +1,7 @@
 /*
 适用于边稠密图的最小生成树算法，复杂度是O(V^2)
 初始化只有一个顶点的树X，然后贪心地选取X和其他顶点之间相连的最小权值的边，并把它加到X中；
-不断这个操作，知道把所有顶点纳入X中，就得到最小生成树。
+不断这个操作，直到把所有顶点纳入X中，就得到最小生成树。
 */
 #include<cstdio>
 #include<queue>
@@ -10,7 +10,6 @@
 using namespace std;
 
 const int MAX_V = 100;
-const int INF = 100000 + 1;
 
 int A[MAX_V][MAX_V]; // 邻接矩阵
 int vis[MAX_V]; // 顶点是否包含在集合X中
@@ -22,7 +21,7 @@ int prim(){
         mincount[i] = A[0][i];
         vis[i] = 0;
     }
-    // 第0号定点
+    // 第0号顶点
     mincount[0] = 0;
     vis[0] = 1; 
     // 剩下V-1个顶点
