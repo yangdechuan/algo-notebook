@@ -2,8 +2,8 @@
 适用于边稀疏图的最小生成树算法，复杂度是O(E*log(E))。
 Kruskal算法按照边权值从小到大顺序查看一遍，如果不产生环（重边也算环），就把当前这条边加入到生成树中。
 */
-#include<cstdio>
-#include<algorithm>
+#include <algorithm>
+#include <cstdio>
 
 using namespace std;
 
@@ -12,44 +12,40 @@ const int MAX_E = 50 * 49 / 2;
 
 // 定义并查集用到的函数
 int father[MAX_V];
-void init(int V){
+void init(int V) {
     // 注意：题目中顶点从1编号
-    for(int i = 1; i <= V; i++) father[i] = i;
+    for (int i = 1; i <= V; i++) father[i] = i;
 }
-int find(int x){
-    if(x == father[x]) return x;
+int find(int x) {
+    if (x == father[x]) return x;
     return (father[x] = find(father[x]));
 }
-void unite(int x, int y){
+void unite(int x, int y) {
     x = find(x);
     y = find(y);
     father[x] = y;
 }
-bool same(int x, int y){
-    return find(x) == find(y);
-}
+bool same(int x, int y) { return find(x) == find(y); }
 
 // 定义图数据结构
-struct edge{
-    int from, to; 
+struct edge {
+    int from, to;
     int cost;
 } edges[MAX_E];
-int cmp(edge e1, edge e2){
-    return e1.cost < e2.cost;
-}
+int cmp(edge e1, edge e2) { return e1.cost < e2.cost; }
 int V, E;
 
-int kruskal(){
+int kruskal() {
     int ans = 0;
     // 初始化并查集
     init(V);
     // 边排序 O(E*log(E))
     sort(edges, edges + E, cmp);
     // kruskal  O(E*alpha(V))  （其中alpha是阿克曼函数的反函数，比log更快。）
-    for(int i = 0; i < E; i++){
+    for (int i = 0; i < E; i++) {
         int from = edges[i].from;
         int to = edges[i].to;
-        if(!same(from, to)){
+        if (!same(from, to)) {
             ans += edges[i].cost;
             unite(from, to);
         }
@@ -57,10 +53,10 @@ int kruskal(){
     return ans;
 }
 
-int main(){
+int main() {
     freopen("in.txt", "r", stdin);
-    while(scanf("%d%d", &V, &E) == 2 && V != 0){
-        for(int i = 0; i < E; i++){
+    while (scanf("%d%d", &V, &E) == 2 && V != 0) {
+        for (int i = 0; i < E; i++) {
             scanf("%d%d%d", &edges[i].from, &edges[i].to, &edges[i].cost);
         }
         printf("%d\n", kruskal());
