@@ -1,43 +1,37 @@
+/*
+最坏情况时间复杂性：O(n*log(n))
+最坏情况时间复杂性：O(n*log(n))
+辅助空间：O(n)
+稳定性：快速排序是稳定的排序方法
+*/
 #include <cstdio>
 
 const int MAXN = 100;
-int a[MAXN];
-int tmp[MAXN];
+int nums[MAXN];  // 待排序数组
+int tmp[MAXN];   // 一个辅助数组
 
-// 归并 a[start:mid]  a[mid+1:end] （包含边界）
-void merge(int start, int mid, int end) {
-    int i = start;
+// 归并 a[left:mid]  a[mid+1:right] （包含边界）
+void merge(int left, int mid, int right) {
+    int i = left;
     int j = mid + 1;
-    int k = 0;
-    while (i <= mid && j <= end) {
-        if (a[i] <= a[j])
-            tmp[k++] = a[i++];
+    int k = left;
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j])
+            tmp[k++] = nums[i++];
         else
-            tmp[k++] = a[j++];
+            tmp[k++] = nums[j++];
     }
-    while (i <= mid) tmp[k++] = a[i++];
-
-    while (j <= end) tmp[k++] = a[j++];
+    while (i <= mid) tmp[k++] = nums[i++];
+    while (j <= right) tmp[k++] = nums[j++];
     // 将排序后的元素，全部都整合到数组a中。
-    for (i = 0; i < k; i++) a[start + i] = tmp[i];
-}
-void merge_sort(int start, int end) {
-    if (start >= end) {
-        return;
-    }
-    int mid = (start + end) / 2;
-    merge_sort(start, mid);
-    merge_sort(mid + 1, end);
-    merge(start, mid, end);
+    for (k = left; k <= right; k++) nums[k] = tmp[k];
 }
 
-int main() {
-    for (int i = 1; i <= 10; i++) {
-        scanf("%d", &a[i]);
-    }
-    merge_sort(1, 10);
-    for (int i = 1; i <= 10; i++) {
-        printf("%d ", a[i]);
-    }
-    return 0;
+// 归并排序
+void merge_sort(int left, int right) {
+    if (left >= right) return;
+    int mid = (left + right) / 2;
+    merge_sort(left, mid);
+    merge_sort(mid + 1, right);
+    merge(left, mid, right);
 }
