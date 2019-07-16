@@ -9,7 +9,7 @@ using namespace std;
 
 const int MAXN = 100;
 //next[x]表示前x个字符的最长公共前后缀。
-//显然下标从1开始是有意义的，为了方便我们置next[0]=1。
+//显然下标从1开始是有意义的，为了方便我们置next[0]=0。
 int next[MAXN];
 
 void getNext(string str) {
