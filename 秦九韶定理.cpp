@@ -50,7 +50,7 @@ int main() {
     }
 }
 /*
-参考：1006: Biorhythms
+参考：OpenJudge 1006: Biorhythms
 样例输入:
 0 0 0 0
 0 0 0 100
