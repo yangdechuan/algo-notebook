@@ -14,7 +14,7 @@ void qsort(int left, int right) {
     int i = left, j = right + 1;
     int tmp = nums[left];  // 算法导论中叫它主元（pivot element）
     while (i < j) {
-        // 从左往右，找第一个（大于）nums的位置
+        // 从左往右，找第一个（大于）tmp的位置
         i++;
         while (i <= right && nums[i] <= tmp) i++;
         // 从右往左，找第一个（小于等于）tmp的位置
