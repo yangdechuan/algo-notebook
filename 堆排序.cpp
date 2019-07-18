@@ -11,10 +11,10 @@ using namespace std;
 vector<int> heapSort(vector<int>& nums) {
     int n = nums.size();
     vector<int> ans(n);
-    // 建小根堆, 可能是O(n)？待查！
+    // 建小根堆, 时间复杂度：O(n)
     // 注意:priority_queue默认是大根堆
-    priority_queue<int, vector<int>, greater<int>> que(nums.begin(),
-                                                       nums.end());
+    // 这里我们建小根堆
+    priority_queue<int, vector<int>, greater<int>> que(nums.begin(), nums.end());
     // 每次从堆中取最小元素 O(n*log(n))
     for (int i = 0; i < n; i++) {
         ans[i] = que.top();
