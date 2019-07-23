@@ -19,7 +19,7 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
-// 迭代法先根遍历
+// 迭代法先根遍历(PreOrder)
 class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
@@ -39,7 +39,7 @@ public:
     }
 };
 
-// 迭代法中根遍历
+// 迭代法中根遍历(InOrder)
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
@@ -59,7 +59,7 @@ public:
     }
 };
 
-// 迭代法后根遍历
+// 迭代法后根遍历(PostOrder)
 class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
@@ -80,6 +80,31 @@ public:
                 pre = root;
                 root = NULL;
             }
+        }
+        return ans;
+    }
+};
+
+/*
+另外一种中根遍历：
+先右子树，再根结点，再左子树
+对于BST，这样遍历可以得到结点的降序排列，有时候会很有用。
+参考：LeetCode：538. Convert BST to Greater Tree
+ */
+class Solution {
+public:
+    vector<int> inorderTraversal2(TreeNode* root) {
+        vector<int> ans;
+        stack<TreeNode*> s;
+        while(!s.empty() || root){
+            while(root){
+                s.push(root);
+                root = root->right;
+            }
+            root = s.top();
+            s.pop();
+            ans.push_back(root->val);
+            root = root->left;
         }
         return ans;
     }
