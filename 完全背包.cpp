@@ -7,6 +7,7 @@ using namespace std;
 int N, V;
 // 第 i 种物品的体积是 v[i]，价值是 w[i]。
 int v[1000 + 1], w[1000 + 1];
+// dp[j] 表示背包容量不超过j的最大价值
 int dp[1000 + 1];
 
 int main(){
