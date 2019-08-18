@@ -1,74 +1,77 @@
+/*
+参考：2387:Til the Cows Come Home
+样例输入:
+5 5
+1 2 20
+2 3 30
+3 4 20
+4 5 20
+1 5 100
+
+样例输出：
+90
+*/
 #include <cstdio>
 #include <queue>
 #include <vector>
 
 using namespace std;
 
-const int MAX_E = 100;
-const int MAX_V = 100;
+const int MAX_V = 1000 + 1;
 const int INF = 0x3f3f3f3f;
 
-int V, E;      // V是顶点数，E是边数。
-int d[MAX_V];  // d[i] 是从s到i的最短距离
-
 /*
-1. 邻接矩阵
+法一. 邻接矩阵
 时间复杂性：O(V^2 + V^2) = O(V^2)
 如果用邻接表，复杂度为O(V^2 + E) = O(V^2)
 */
-int A[MAX_V][MAX_V];  // A[u][v]表示e=(u, v)的权值，不存在这条边时设为INF。
-bool used[MAX_V];  // used[i]=true表示已经求出s到i的最短路径
-void dijkstra1(int s) {
-    fill(d, d + V, INF);
-    d[s] = 0;
-    fill(used, used + V, false);
-
-    while (true) {  // 最多循环V次
-        // 找下一个距离s最短的顶点u
-        // 复杂度为O(V^2)
-        int u = -1;
-        for (int i = 0; i < V; i++) {
-            if (!used[i] && (u == -1 || d[i] < d[u])) {
-                u = i;
-            }
-        }
-        if (u == -1) break;
-        // 对每个u可达的顶点v，更新d[v]。
-        // 复杂度为O(V^2)，如果是邻接表，这部分的复杂度可降到O(E)
-        for (int i = 0; i < V; i++) {
-            if (A[u][i] != INF) {
-                d[i] = min(d[i], d[u] + A[u][i]);
-            }
-        }
-        used[u] = true;  // s到u的最短路径已经求出来了
-    }
-}
 
 /*
-2. 邻接表 + 堆优化
+法二. 邻接表 + 堆优化
 时间复杂性：O(E*log(V))
 */
+int V, E;      // V是顶点数，E是边数。
 struct edge {
     int to, cost;
 };
 vector<edge> G[MAX_V];  // 图的邻接表表示
-void dijkstra2(int s) {
+int d[MAX_V];  // d[i] 是从s到i的最短距离
+
+void dijkstra(int source){
+    for(int i = 1; i <= V; i++) d[i] = INF;
+    d[source] = 0;
     typedef pair<int, int> P;  // second是顶点编号，first是s到该顶点的最短距离。
     priority_queue<P, vector<P>, greater<P>> que;
-    fill(d, d + V, INF);
-    d[s] = 0;
-    que.push(P(0, s));
-    while (!que.empty()) {
+    que.push(make_pair(0, source));
+    while(!que.empty()){
         P p = que.top();
+        que.pop();
         int u = p.second;
-        if (p.first > d[u]) continue;  // 重要：如果这是旧的结点，忽略它。
-        for (int i = 0; i < G[u].size(); i++) {
+        if(d[u] < p.first) continue;  // 重要：如果这是旧的结点，忽略它。
+        for(int i = 0; i < G[u].size(); i++){
             edge e = G[u][i];
-            if (d[e.to] > d[u] + e.cost) {
-                d[e.to] = d[u] + e.cost;
-                que.push(P(d[e.to],
-                           e.to));  // 注意： 只插入，并没有替换原来的e.to结点
+            int v = e.to;
+            if(d[u] + e.cost < d[v]){
+                d[v] = d[u] + e.cost;
+                // 注意： 只插入，并没有替换原来的e.to结点，所以需要第50行代码的判断。
+                // STL的priority_queue不支持decrease-key操作！
+                que.push(make_pair(d[v], v)); 
             }
         }
     }
+}
+
+int main(){
+    freopen("in.txt", "r", stdin);
+    scanf("%d%d", &E, &V);
+    for(int i = 0; i < E; i++){
+        int from, to, cost;
+        scanf("%d%d%d", &from, &to, &cost);
+        G[from].push_back({to, cost});
+        G[to].push_back({from, cost});
+    }
+    dijkstra(V);
+    printf("%d", d[1]);
+
+    return 0;
 }
