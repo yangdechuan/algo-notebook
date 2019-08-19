@@ -1,5 +1,5 @@
 /*
-参考：2387:Til the Cows Come Home
+参考：OpenJudge 2387:Til the Cows Come Home
 样例输入:
 5 5
 1 2 20
@@ -30,41 +30,42 @@ const int INF = 0x3f3f3f3f;
 法二. 邻接表 + 堆优化
 时间复杂性：O(E*log(V))
 */
-int V, E;      // V是顶点数，E是边数。
+int V, E;  // V是顶点数，E是边数。
 struct edge {
     int to, cost;
 };
 vector<edge> G[MAX_V];  // 图的邻接表表示
-int d[MAX_V];  // d[i] 是从s到i的最短距离
+int d[MAX_V];           // d[i] 是从s到i的最短距离
 
-void dijkstra(int source){
-    for(int i = 1; i <= V; i++) d[i] = INF;
+void dijkstra(int source) {
+    for (int i = 1; i <= V; i++) d[i] = INF;
     d[source] = 0;
     typedef pair<int, int> P;  // second是顶点编号，first是s到该顶点的最短距离。
     priority_queue<P, vector<P>, greater<P>> que;
     que.push(make_pair(0, source));
-    while(!que.empty()){
+    while (!que.empty()) {
         P p = que.top();
         que.pop();
         int u = p.second;
-        if(d[u] < p.first) continue;  // 重要：如果这是旧的结点，忽略它。
-        for(int i = 0; i < G[u].size(); i++){
+        if (d[u] < p.first) continue;  // 重要：如果这是旧的结点，忽略它。
+        for (int i = 0; i < G[u].size(); i++) {
             edge e = G[u][i];
             int v = e.to;
-            if(d[u] + e.cost < d[v]){
+            if (d[u] + e.cost < d[v]) {
                 d[v] = d[u] + e.cost;
-                // 注意： 只插入，并没有替换原来的e.to结点，所以需要第50行代码的判断。
+                // 注意：
+                // 只插入，并没有替换原来的e.to结点，所以需要第50行代码的判断。
                 // STL的priority_queue不支持decrease-key操作！
-                que.push(make_pair(d[v], v)); 
+                que.push(make_pair(d[v], v));
             }
         }
     }
 }
 
-int main(){
+int main() {
     freopen("in.txt", "r", stdin);
     scanf("%d%d", &E, &V);
-    for(int i = 0; i < E; i++){
+    for (int i = 0; i < E; i++) {
         int from, to, cost;
         scanf("%d%d%d", &from, &to, &cost);
         G[from].push_back({to, cost});
