@@ -1,60 +1,57 @@
 /*
 算法参考博客：http://blog.csdn.net/github_35890787/article/details/77163081
 */
-#include <cstdio>
 #include <iostream>
-#include <string>
-
+#include <vector>
 using namespace std;
 
-const int MAXN = 100;
-//next[x]表示前x个字符的最长公共前后缀。
-//显然下标从1开始是有意义的，为了方便我们置next[0]=0。
-int next[MAXN];
+// 参考算法导论
+vector<int> getPrefix(string pattern) {
+    // 加一个空字符使得pattern从1开始编号
+    // 这样prefix和pattern都是从1开始编号
+    // pattern[1:m]  <==>  prefix[1:m]
+    int m = pattern.size();
+    pattern = " " + pattern;
 
-void getNext(string str) {
-    next[0] = next[1] = 0;
-    int comLength = 0;
-    //i为字符串下标，字符串编号从0开始。
-    for(int i = 1; i < str.size(); i++) {
-        //设str前i个字符为substr
-        //如果substr存在公共前后缀（comLength > 0），
-        //并且前缀的下一个字符不等于substr的下一个字符(str[i] != str[comLength])
-        while(comLength > 0 && str[i] != str[comLength]) {
-            //更新最长公共前后缀
-            comLength = next[comLength];
+    // prefix[i]表示pattern[1:i]子串的最长公共前后缀长度
+    vector<int> prefix(m + 1);
+    // 第1个字符
+    prefix[1] = 0;
+    int k = 0;  // k = prefix[1]
+    // 第2到第m个字符
+    for (int i = 2; i <= m; i++) {
+        // k是pattern[1:i-1]的最长公共前后缀
+        while (k > 0 && pattern[i] != pattern[k + 1]) {
+            k = prefix[k];
         }
-        if(str[i] == str[comLength]) {
-            comLength++;
-        }//else comLength一定是0
-        //计算str[0-i]子串的最长公共前后缀
-        next[i + 1] = comLength;
+        if (pattern[i] == pattern[k + 1]) {
+            k++;
+        }
+        prefix[i] = k;
     }
+    return prefix;
 }
-//pattern在text中出现的位置
+
 void kmp(string text, string pattern) {
-    //q为已匹配的字符串长度
+    vector<int> prefix = getPrefix(pattern);
+    // i是text的下标，q是pattern的下标，都是从0开始
     int q = 0;
-    //遍历text
-    for(int i = 0; i < text.size(); i++) {
-        while(q > 0 && text[i] != text[q]) {
-            q = next[q];//下一个字符不匹配
+    for (int i = 0; i < text.size(); i++) {
+        while (q > 0 && text[i] != pattern[q]) {
+            q = prefix[q];
         }
-        if(text[i] == text[q]) {
-            q++;//下一个字符匹配
+        if (text[i] == pattern[q]) {
+            q++;
         }
-        if(q == pattern.size()) {//整个pattern都匹配了
+        if (q == pattern.size()) {
             cout << "Pattern occurs with shift " << i - q + 1 << endl;
-            q = next[q];//寻找下一次匹配
+            q = prefix[q];
         }
     }
 }
 
 int main() {
-    string text, pattern;
-    cin >> text >> pattern;
-    getNext(pattern);
+    string text = "He like Beijing, I also like Beijing";
+    string pattern = "Beijing";
     kmp(text, pattern);
-    return 0;
-
 }
