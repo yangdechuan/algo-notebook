@@ -13,6 +13,7 @@ $$dp(i, j) = \max \{dp(i - 1, j), dp(i - 1, j - v[i]) + w[i]\}$$
 
 解：
 $dp(i, j)$表示前i种物品放入容量为j的背包的最大收益
+
 $$ dp(i, j) = \max \{ dp(i, j), dp(i, j - v[i]) + w[i] \} $$
 
 ## 多重背包
@@ -40,6 +41,7 @@ $$ dp(i, j) = \max \{ dp(i, j), dp(i, j - v[i]) + w[i] \} $$
 
 解：
 $dp(i, j)$表示前i组物品放入容量为j的背包的最大收益
+
 $$ dp(i, j) = \max \{ dp(i - 1, j), \max_k \{dp(i - 1, j - v[i][k]) + w[i][k] \} \} $$
 
 ## 二维费用背包
@@ -47,4 +49,5 @@ $$ dp(i, j) = \max \{ dp(i - 1, j), \max_k \{dp(i - 1, j - v[i][k]) + w[i][k] \}
 每件物品只能用一次。体积是 vi，重量是 mi，价值是 wi。
 
 解： $dp(i, j, k)$表示前i个物品放入容量为j，承重为k的背包的最大收益。
+
 $$ dp(i, j, k) = \max \{ dp(i - 1, j, k), dp(i-1, j-v[i], k-m[i]) + w[i] \} $$
