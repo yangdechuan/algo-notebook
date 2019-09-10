@@ -5,28 +5,28 @@
 二叉树的层次遍历：
 宽度优先遍历（BFS），用队列；
  */
-#include<vector>
-#include<stack>
-#include<queue>
+#include <queue>
+#include <stack>
+#include <vector>
 
 using namespace std;
 
 // Definition for a binary tree node.
 struct TreeNode {
     int val;
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode* left;
+    TreeNode* right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
 // 迭代法先根遍历(PreOrder)
 class Solution {
-public:
+   public:
     vector<int> preorderTraversal(TreeNode* root) {
         vector<int> ans;
         stack<TreeNode*> s;
-        while(!s.empty() || root) {
-            while(root) {
+        while (!s.empty() || root) {
+            while (root) {
                 s.push(root);
                 ans.push_back(root->val);
                 root = root->left;
@@ -41,12 +41,12 @@ public:
 
 // 迭代法中根遍历(InOrder)
 class Solution {
-public:
+   public:
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> ans;
         stack<TreeNode*> s;
-        while(!s.empty() || root){
-            while(root){
+        while (!s.empty() || root) {
+            while (root) {
                 s.push(root);
                 root = root->left;
             }
@@ -61,20 +61,20 @@ public:
 
 // 迭代法后根遍历(PostOrder)
 class Solution {
-public:
+   public:
     vector<int> postorderTraversal(TreeNode* root) {
         vector<int> ans;
         TreeNode* pre = NULL;
         stack<TreeNode*> s;
-        while(!s.empty() || root){
-            while(root){
+        while (!s.empty() || root) {
+            while (root) {
                 s.push(root);
                 root = root->left;
             }
             root = s.top();
-            if(root->right && pre != root->right){
+            if (root->right && pre != root->right) {
                 root = root->right;
-            }else{
+            } else {
                 s.pop();
                 ans.push_back(root->val);
                 pre = root;
@@ -92,12 +92,12 @@ public:
 参考：LeetCode：538. Convert BST to Greater Tree
  */
 class Solution {
-public:
+   public:
     vector<int> inorderTraversal2(TreeNode* root) {
         vector<int> ans;
         stack<TreeNode*> s;
-        while(!s.empty() || root){
-            while(root){
+        while (!s.empty() || root) {
+            while (root) {
                 s.push(root);
                 root = root->right;
             }
@@ -112,21 +112,21 @@ public:
 
 // 二叉树层次遍历
 class Solution {
-public:
+   public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>> ans;
-        if(root == NULL) return ans;
+        if (root == NULL) return ans;
         queue<TreeNode*> que;
         que.push(root);
-        while(!que.empty()){
+        while (!que.empty()) {
             vector<int> vec;
             int n = que.size();
-            for(int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
                 root = que.front();
                 vec.push_back(root->val);
                 que.pop();
-                if(root->left) que.push(root->left);
-                if(root->right) que.push(root->right);
+                if (root->left) que.push(root->left);
+                if (root->right) que.push(root->right);
             }
             ans.push_back(vec);
         }
