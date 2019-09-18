@@ -10,19 +10,22 @@ using namespace std;
 
 vector<int> nums = {1, 5, 2, 2, 4, 3, 9, 2};
 
+// 标准做法（方便应用于链表排序）
 int partition(int left, int right) {
-    int pivot = nums[left];
+    int pivot = nums[left];  // 主元
     int i = left;
-    for (int j = left + 1; j <= right; j++) {
+    int j = left + 1;
+    while (j <= right) {
         if (nums[j] < pivot) {
             i++;
             swap(nums[i], nums[j]);
         }
+        j++;
     }
-    swap(nums[i], nums[left]);
+    swap(nums[left], nums[i]);
     return i;
 }
-// 另一种做法
+// 一般教辅材料里的做法
 int partition2(int left, int right) {
     int pivot = nums[left];  // 算法导论中叫它主元（pivot element）
     int i = left + 1, j = right;
@@ -43,7 +46,6 @@ int partition2(int left, int right) {
 void qsort(int left, int right) {
     if (left >= right) return;
     int q = partition(left, right);
-    // 此时j左侧都是小于等于它的元素，右侧都是大于它的元素
     qsort(left, q - 1);
     qsort(q + 1, right);
 }
