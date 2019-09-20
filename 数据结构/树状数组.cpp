@@ -9,7 +9,7 @@ const int MAXN = 1000;
 int bit[MAXN];  // bit的每个值对应线段树的一个区间
 int n;          // n个元素
 
-// 计算a1 + a2 + ... + an
+// 计算a1 + a2 + ... + ai
 int query(int i) {
     int s = 0;
     while (i) {
