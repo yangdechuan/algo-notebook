@@ -5,53 +5,40 @@
 #include <vector>
 using namespace std;
 
-// 参考算法导论
-vector<int> getPrefix(string pattern) {
-    // 加一个空字符使得pattern从1开始编号
-    // 这样prefix和pattern都是从1开始编号
-    // pattern[1:m]  <==>  prefix[1:m]
+// 在text中找出pattern出现的每一个位置
+void kmp(string text, string pattern) {
+    int n = text.size();
     int m = pattern.size();
-    pattern = " " + pattern;
-
-    // prefix[i]表示pattern[1:i]子串的最长公共前后缀长度
-    vector<int> prefix(m + 1);
-    // 第1个字符
-    prefix[1] = 0;
-    int k = 0;  // k = prefix[1]
-    // 第2到第m个字符
-    for (int i = 2; i <= m; i++) {
-        // k是pattern[1:i-1]的最长公共前后缀
-        while (k > 0 && pattern[i] != pattern[k + 1]) {
-            k = prefix[k];
+    if (m == 0) return;
+    if (n == 0) return;
+    // 1. 计算前缀函数 O(m)
+    // prefix[i]表示pattern[0:i]的最长公共前后缀长度
+    vector<int> prefix(m);
+    prefix[0] = 0;
+    int k = 0;
+    for (int i = 1; i < m; i++) {
+        while (k > 0 && pattern[i] != pattern[k]) {
+            k = prefix[k - 1];
         }
-        if (pattern[i] == pattern[k + 1]) {
-            k++;
-        }
+        if (pattern[i] == pattern[k]) k++;
         prefix[i] = k;
     }
-    return prefix;
-}
-
-void kmp(string text, string pattern) {
-    vector<int> prefix = getPrefix(pattern);
-    // i是text的下标，q是pattern的下标，都是从0开始
+    // 2. 匹配 O(n)
     int q = 0;
-    for (int i = 0; i < text.size(); i++) {
+    for (int i = 0; i < n; i++) {
         while (q > 0 && text[i] != pattern[q]) {
-            q = prefix[q];
+            q = prefix[q - 1];
         }
-        if (text[i] == pattern[q]) {
-            q++;
-        }
-        if (q == pattern.size()) {
+        if (text[i] == pattern[q]) q++;
+        if (q == m) {
             cout << "Pattern occurs with shift " << i - q + 1 << endl;
-            q = prefix[q];
+            q = prefix[q - 1];
         }
     }
 }
 
 int main() {
-    string text = "He like Beijing, I also like Beijing";
-    string pattern = "Beijing";
+    string text = "aabaaabaaac";
+    string pattern = "aabaaac";
     kmp(text, pattern);
 }
