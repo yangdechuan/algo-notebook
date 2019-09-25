@@ -1,7 +1,7 @@
 /*
 树状数组(Binary Indexed Tree, BIT)是能够O(logn)复杂度下完成下述操作的数据结构
 给定一个初始值全为0的数列 a1, a2, ..., an
-1. 给定i，计算a1 + a2 + ... + an
+1. 给定i，计算a1 + a2 + ... + ai
 2. 给定i和x，执行ai = ai + x
 */
 
