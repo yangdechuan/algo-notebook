@@ -9,12 +9,15 @@ const int MAXN = 1000;
 int bit[MAXN];  // bit的每个值对应线段树的一个区间
 int n;          // n个元素
 
+// i的二进制最低非0位对应的幂
+int lowbit(int i) { return i & -i; }
+
 // 计算a1 + a2 + ... + ai
 int query(int i) {
     int s = 0;
     while (i) {
         s += bit[i];
-        i -= (i & -i);  // 区间i的前一个区间
+        i -= lowbit(i);  // 区间i的前一个区间
     }
     return s;
 }
@@ -23,6 +26,6 @@ int query(int i) {
 void add(int i, int x) {
     while (i <= n) {
         bit[i] += x;
-        i += (i & -i);  // 下一个覆盖区间i的区间
+        i += lowbit(i);  // 下一个覆盖区间i的区间
     }
 }
