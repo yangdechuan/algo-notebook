@@ -1,17 +1,18 @@
-#include<vector>
-#include<queue>
-#include<iostream>
+#include <iostream>
+#include <queue>
+#include <vector>
 
 using namespace std;
 
-int main(){
-    struct P{
+int main() {
+    struct P {
         int x, y;
-        P(): x(0), y(0){}
-        P(int xx, int yy): x(xx), y(yy){}
+        P() : x(0), y(0) {}
+        P(int xx, int yy) : x(xx), y(yy) {}
         // 结构体变量不可比较，所以必须重载运算符<，使之可以比较。
-        bool operator< (P p)const {  // const修饰函数，表示函数内不能修改对象的数据成员。
-            if(x == p.x) return y < p.y;
+        bool operator<(
+            P p) const {  // const修饰函数，表示函数内不能修改对象的数据成员。
+            if (x == p.x) return y < p.y;
             return x < p.x;
         }
     };
@@ -26,12 +27,13 @@ int main(){
     // 注意，用less时候必须定义operator<
     // 同理，用greater时候必须定义operator>
     // priority_queue<P, vector<P>, less<P>> que;  // 大根堆
+    // priority_queue<P, vector<P>, greater<P>> que;  // 小根堆
     priority_queue<P> que;  // 默认大根堆
     que.push(p1);
     que.push(p2);
     que.push(p3);
     que.push(p4);
-    while(!que.empty()){
+    while (!que.empty()) {
         cout << que.top().x << "," << que.top().y << endl;
         que.pop();
     }
