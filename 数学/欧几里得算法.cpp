@@ -9,9 +9,10 @@ int gcd(int a, int b) {
 }
 
 // 扩展欧几里得算法
-// 解x和y，使得 a*x + b*y = gcd(a, b)
-// 返回a和b的最大公约数
-// 一定存在整数x和y使得ax+by=gcd(a,b)
+// 解x和y，使得 a * x + b * y = gcd(a, b)，并返回a和b的最大公约数
+// 解x1和y1，使得 a1 * x1 + b1 * y1 = gcd(a1, b1)，其中 a1 = b, b1 = a % b
+// 解x2和y2，使得 a2 * x2 + b2 * y2 = gcd(a2, b2)，其中 a2 = b1, b2 = a1 % b1
+// 解xn和yn，使得 an * xn + bn * yn = gcd(an, bn)，其中 an = bn-1, bn = an-1 % bn-1
 int extgcd(int a, int b, int& x, int& y) {
     int d = a;
     if (b != 0) {
@@ -22,6 +23,26 @@ int extgcd(int a, int b, int& x, int& y) {
     } else {
         x = 1;
         y = 0;
+    }
+    return d;
+}
+
+// 更便于理解的写法
+int extgcd_v2(int a, int b, int& x, int& y) {
+    int d;
+    if(b == 0) {
+        d = a;
+        x = 1;
+        y = 0;
+    }else if(a % b == 0) {
+        d = b;
+        x = 0;
+        y = 1;
+    }else {
+        int x1, y1;
+        d = extgcd(b, a % b, x1, y1);
+        x = y1;
+        y = x1 - a / b * y1;
     }
     return d;
 }
